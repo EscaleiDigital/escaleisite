@@ -27,10 +27,28 @@ const Header = () => {
             </a>
           </nav>
 
-          {/* CTA WhatsApp Button */}
+          {/* Ações à direita: badge Kommo + botão WhatsApp */}
           <div className="flex items-center gap-4">
+            {/* Badge Kommo (desktop) */}
             <a
-              href="https://wa.me/55419855303955?text=Ol%C3%A1!%20Quero%20escalar%20os%20meus%20resultados."
+              href="https://www.kommo.com/pt-br/partners/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center hover:opacity-80 transition"
+              aria-label="Parceiro Kommo"
+            >
+              <img
+                src="/partners/kommo-badge.svg"
+                alt="Parceiro Kommo"
+                className="h-7 w-auto"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+
+            {/* Botão WhatsApp (desktop) */}
+            <a
+              href="https://wa.me/5541985303955?text=Ol%C3%A1!%20Quero%20escalar%20os%20meus%20resultados."
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:flex items-center gap-2 bg-green-600 text-white font-bold px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition-colors"
@@ -83,7 +101,9 @@ const Header = () => {
               >
                 Contato
               </a>
+
               <div className="px-4 pt-2">
+                {/* Botão WhatsApp (mobile) */}
                 <a
                   href="https://wa.me/5541985303955?text=Ol%C3%A1!%20Quero%20escalar%20os%20meus%20resultados."
                   target="_blank"
