@@ -31,7 +31,7 @@ const Header = () => {
           <div className="flex items-center gap-4">
             {/* Badge Kommo (desktop) */}
             <a
-              href="https://www.kommo.com/pt-br/"
+              href="https://www.kommo.com/"
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:inline-flex items-center hover:opacity-80 transition"
