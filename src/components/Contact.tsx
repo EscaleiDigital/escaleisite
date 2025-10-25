@@ -194,7 +194,7 @@ const Contact = () => {
                       <Phone className="w-4 h-4 text-primary" />
                     </div>
                     <div>
-                      <p className="font-medium">(41) 99236-9273</p>
+                      <p className="font-medium">(41) 98530-3955</p>
                       <p className="text-sm text-muted-foreground">WhatsApp</p>
                     </div>
                   </div>
