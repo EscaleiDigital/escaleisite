@@ -30,13 +30,13 @@ const Header = () => {
           {/* CTA WhatsApp Button */}
           <div className="flex items-center gap-4">
             <a
-              href="https://wa.me/5541992369273?text=Ol%C3%A1!%20Quero%20escalar%20os%20meus%20resultados."
+              href="https://wa.me/55419855303955?text=Ol%C3%A1!%20Quero%20escalar%20os%20meus%20resultados."
               target="_blank"
               rel="noopener noreferrer"
               className="hidden sm:flex items-center gap-2 bg-green-600 text-white font-bold px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition-colors"
             >
               <Phone className="w-4 h-4" />
-              (41) 99236-9273
+              (41) 98530-3955
             </a>
 
             {/* Mobile Menu Button */}
@@ -85,13 +85,13 @@ const Header = () => {
               </a>
               <div className="px-4 pt-2">
                 <a
-                  href="https://wa.me/5541992369273?text=Ol%C3%A1!%20Quero%20escalar%20os%20meus%20resultados."
+                  href="https://wa.me/5541985303955?text=Ol%C3%A1!%20Quero%20escalar%20os%20meus%20resultados."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full flex items-center justify-center gap-2 bg-green-600 text-white font-bold px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition-colors"
                 >
                   <Phone className="w-4 h-4" />
-                  (41) 99236-9273
+                  (41) 98530-3955
                 </a>
               </div>
             </nav>
