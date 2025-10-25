@@ -36,7 +36,7 @@ const Footer = () => {
               </a>
 
               <a
-                href="https://www.kommo.com/pt-br/partners/"
+                href="https://www.kommo.com/pt-br/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center hover:opacity-80 transition"
