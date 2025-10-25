@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Mail, MapPin, Phone } from "lucide-react";
+import { Instagram, Mail, MapPin, Phone } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -7,26 +7,48 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <div className="w-4 h-4 bg-white rounded-sm"></div>
-              </div>
-              <span className="text-xl font-bold">
-                ESCALEI<span className="text-primary">DIGITAL</span>
-              </span>
-            </div>
+            {/* Logo */}
+            <a href="/" className="inline-flex items-center" aria-label="Escalei Digital">
+              <img
+                src="/brand/logo-escalei-footer.png"
+                alt="Escalei Digital"
+                className="h-8 w-auto"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+
             <p className="text-sm text-white/70 leading-relaxed">
-              Transformamos cliques em vendas recorrentes através de estratégias comprovadas 
+              Transformamos cliques em vendas recorrentes através de estratégias comprovadas
               em Meta Ads, Google Ads e automações inteligentes.
             </p>
-            <div className="flex gap-3">
+
+            {/* Social + Badge Kommo */}
+            <div className="flex items-center gap-3">
               <a
                 href="https://www.instagram.com/escaleidigital/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-white/10 p-2 rounded-lg hover:bg-white/20 transition-colors"
+                aria-label="Instagram Escalei Digital"
               >
                 <Instagram className="w-4 h-4" />
+              </a>
+
+              <a
+                href="https://www.kommo.com/pt-br/partners/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center hover:opacity-80 transition"
+                aria-label="Parceiro Kommo"
+              >
+                <img
+                  src="/partners/kommo-badge.svg"
+                  alt="Parceiro Kommo"
+                  className="h-8 w-auto"
+                  loading="lazy"
+                  decoding="async"
+                />
               </a>
             </div>
           </div>
