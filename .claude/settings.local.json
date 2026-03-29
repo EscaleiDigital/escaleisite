@@ -6,7 +6,20 @@
       "Bash(mv *.png *.jpg *.jfif *.JPG *.JFIF *.PNG _assets_temp/)",
       "Bash(mkdir -p C:/Users/Trabalho/projetos-claude/_assets_temp_escalei)",
       "Bash(mv C:/Users/Trabalho/projetos-claude/site-escalei-digital/_assets_temp/* C:/Users/Trabalho/projetos-claude/_assets_temp_escalei/)",
-      "Bash(rmdir C:/Users/Trabalho/projetos-claude/site-escalei-digital/_assets_temp)"
+      "Bash(rmdir C:/Users/Trabalho/projetos-claude/site-escalei-digital/_assets_temp)",
+      "Bash(mkdir -p C:/Users/Trabalho/projetos-claude/site-escalei-digital/public/images/clientes)",
+      "Bash(mv C:/Users/Trabalho/projetos-claude/_assets_temp_escalei/* C:/Users/Trabalho/projetos-claude/site-escalei-digital/public/images/clientes/)",
+      "Bash(cp C:/Users/Trabalho/projetos-claude/site-escalei-digital/public/images/clientes/2.png C:/Users/Trabalho/projetos-claude/site-escalei-digital/public/images/logo.png)",
+      "Bash(cp \"Unilever-Emblema-1024x576.png\" unilever.png)",
+      "Bash(cp \"banco-azul.png\" azul-seguros.png)",
+      "Bash(cp \"SOFTCUT.PNG\" softcut.png)",
+      "Bash(cp \"plastfiro_logo.jfif\" plastfiro.png)",
+      "Bash(cp \"plastfrio_logo.jfif\" plastfrio.png)",
+      "Bash(ls *.png *.jpg)",
+      "Bash(npm run:*)",
+      "Bash(python3 -c \":*)",
+      "Bash(node -e \":*)",
+      "Bash(powershell -Command \":*)"
     ]
   }
 }
