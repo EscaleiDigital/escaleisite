@@ -19,7 +19,12 @@
       "Bash(npm run:*)",
       "Bash(python3 -c \":*)",
       "Bash(node -e \":*)",
-      "Bash(powershell -Command \":*)"
+      "Bash(powershell -Command \":*)",
+      "Bash(cp \"imagens sem logo/Escalei Digital.png\" logo.png)",
+      "Bash(cp \"imagens sem logo/clientes/DryWash.png\" clientes/DryWash.png)",
+      "Bash(cp \"imagens sem logo/clientes/Azul Seguros.png\" clientes/azul-seguros.png)",
+      "Bash(cp \"imagens sem logo/clientes/Impaktto.png\" clientes/Impaktto.png)",
+      "Bash(cp \"imagens sem logo/clientes/Malwee.png\" clientes/Malwee.png)"
     ]
   }
 }

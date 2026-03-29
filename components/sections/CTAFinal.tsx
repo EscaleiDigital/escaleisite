@@ -11,12 +11,14 @@ export default function CTAFinal() {
   return (
     <section className="bg-[#0E261B] py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-6">
-            Sua empresa não precisa de mais ações soltas. Precisa de uma estrutura melhor para crescer.
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-2xl lg:text-3xl font-bold text-white leading-tight mb-6">
+            Sua empresa não precisa de mais ações soltas.<br />
+            Precisa de uma estrutura melhor para crescer.
           </h2>
-          <p className="text-white/70 text-lg leading-relaxed mb-10">
-            A Escalei organiza aquisição, comercial, CRM e rotina de performance em uma Máquina de Vendas pensada para empresas que querem mais previsibilidade, escala e clareza para decidir.
+          <p className="text-white/70 text-base leading-relaxed mb-10">
+            A Escalei organiza aquisição, comercial, CRM e rotina de performance em uma Máquina de Vendas<br />
+            pensada para empresas que querem mais previsibilidade, escala e clareza para decidir.
           </p>
           <a
             href={getWhatsAppUrl("cta_final")}

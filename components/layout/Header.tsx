@@ -40,12 +40,13 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="shrink-0">
           <Image
-            src="/images/logo.png"
+            src="/images/clientes/logo.png"
             alt="Escalei Digital"
-            width={140}
-            height={40}
-            className="h-9 w-auto"
+            width={240}
+            height={68}
+            className="h-14 w-auto"
             priority
+            quality={100}
           />
         </Link>
 
