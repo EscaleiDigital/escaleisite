@@ -26,8 +26,7 @@ export default function MaquinaDeVendas() {
             Máquina de Vendas
           </p>
           <h2 className="text-2xl lg:text-3xl font-bold text-white leading-tight mb-5">
-            Mais do que marketing, uma operação<br />
-            pensada para vender com previsibilidade.
+            Mais do que marketing, uma operação<br className="hidden lg:block" />{" "}pensada para vender com previsibilidade.
           </h2>
           <p className="text-white/65 leading-relaxed text-justify">
             A Máquina de Vendas é a solução da Escalei para empresas que já vendem, mas precisam de mais organização, inteligência e estrutura para crescer melhor. Ela integra aquisição, operação comercial, CRM, treinamento e acompanhamento de métricas em um único modelo de atuação.

@@ -38,7 +38,7 @@ export default function ClientBar() {
                 width={216}
                 height={77}
                 quality={100}
-                className="h-[68px] w-auto object-contain"
+                className="h-[88px] lg:h-[68px] w-auto object-contain"
                 style={{ filter: "grayscale(1) brightness(0.4)" }}
               />
             </div>

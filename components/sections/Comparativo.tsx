@@ -22,7 +22,7 @@ export default function Comparativo() {
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="max-w-2xl mb-16">
           <h2 className="text-2xl lg:text-3xl font-bold text-[#111111] leading-tight">
-            Enquanto as agências executam partes,<br />
+            Enquanto as agências executam partes,<br className="hidden lg:block" />{" "}
             <span className="text-[#0E261B]">a Escalei estrutura a sua operação.</span>
           </h2>
 

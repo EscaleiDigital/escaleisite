@@ -17,8 +17,7 @@ export default function CTAFinal() {
             Precisa de uma estrutura melhor para crescer.
           </h2>
           <p className="text-white/70 text-base leading-relaxed mb-10">
-            A Escalei organiza aquisição, comercial, CRM e rotina de performance em uma Máquina de Vendas<br />
-            pensada para empresas que querem mais previsibilidade, escala e clareza para decidir.
+            A Escalei organiza aquisição, comercial, CRM e rotina de performance em uma Máquina de Vendas<span className="hidden lg:inline"><br /></span>{" "}pensada para empresas que querem mais previsibilidade, escala e clareza para decidir.
           </p>
           <a
             href={getWhatsAppUrl("cta_final")}

@@ -22,7 +22,7 @@ export default function Problema() {
     <section className="bg-white py-24 lg:py-32">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="max-w-3xl mb-16">
-          <h2 className="text-2xl font-bold text-[#111111] leading-tight mb-5 whitespace-nowrap">
+          <h2 className="text-2xl font-bold text-[#111111] leading-tight mb-5 lg:whitespace-nowrap">
             Sua empresa não trava só por falta de demanda.
           </h2>
           <p className="text-lg text-[#4E555B] leading-relaxed">

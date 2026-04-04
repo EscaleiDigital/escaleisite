@@ -11,13 +11,11 @@ export default function Hero() {
 
           {/* Texto */}
           <div>
-            <p className="text-xs font-semibold tracking-widest uppercase text-[#0C6201] mb-5 whitespace-nowrap overflow-hidden text-ellipsis">
+            <p className="text-xs font-semibold tracking-widest uppercase text-[#0C6201] mb-5 lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis">
               Máquina de Vendas para empresas que querem escalar com mais clareza e controle
             </p>
             <h1 className="text-3xl sm:text-4xl font-bold text-[#111111] leading-tight mb-6">
-              A estrutura certa para<br />
-              escalar vendas com mais<br />
-              organização e performance.
+              A estrutura certa para<br className="hidden lg:block" />{" "}escalar vendas com mais<br className="hidden lg:block" />{" "}organização e performance.
             </h1>
             <p className="text-lg text-[#4E555B] leading-relaxed mb-10 max-w-lg text-justify">
               A Escalei integra aquisição, operação comercial, CRM, treinamento e rotina de performance em uma única solução para empresas que já vendem e precisam de um próximo nível de estrutura.
