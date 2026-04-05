@@ -3,7 +3,7 @@ const blocks = [
     title: "Escalei CRM",
     description:
       "Para pequenos negócios que precisam organizar leads, visualizar o funil e reduzir a perda de oportunidades com uma estrutura mais simples e eficiente.",
-    plans: "Disponível nos planos Start e Performance.",
+    plans: "Nos planos Start e Performance",
     dark: false,
   },
   {

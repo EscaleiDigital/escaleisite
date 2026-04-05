@@ -12,7 +12,7 @@ export default function Hero() {
           {/* Texto */}
           <div>
             <p className="text-xs font-semibold tracking-widest uppercase text-[#0C6201] mb-5 lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis">
-              Máquina de Vendas para empresas que querem escalar com mais clareza e controle
+              Máquina de Vendas
             </p>
             <h1 className="text-3xl sm:text-4xl font-bold text-[#111111] leading-tight mb-6">
               A estrutura certa para<br className="hidden lg:block" />{" "}escalar vendas com mais<br className="hidden lg:block" />{" "}organização e performance.
@@ -38,7 +38,7 @@ export default function Hero() {
               </a>
             </div>
             <p className="mt-5 text-sm text-[#4E555B]/60">
-              Atendimento comercial de segunda a sexta, das 9h às 18h.
+              Atendimento de segunda a sexta, das 9h às 18h.
             </p>
           </div>
 

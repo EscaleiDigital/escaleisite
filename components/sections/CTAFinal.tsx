@@ -29,7 +29,7 @@ export default function CTAFinal() {
             Chame no WhatsApp
           </a>
           <p className="mt-4 text-sm text-white/40">
-            Atendimento comercial de segunda a sexta, das 9h às 18h.
+            Atendimento de segunda a sexta, das 9h às 18h.
           </p>
         </div>
       </div>
