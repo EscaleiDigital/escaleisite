@@ -29,6 +29,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Tokens da página /maquina-comercial (Lovable export) */
+.mmc-page {
+  --mmc-ink: oklch(0.16 0.015 160);
+  --mmc-ink-fg: oklch(0.98 0.005 95);
+  --mmc-emerald-deep: oklch(0.38 0.10 158);
+  --mmc-emerald-glow: oklch(0.55 0.15 158);
+  --mmc-offwhite: oklch(0.985 0.005 95);
+  --mmc-graphite: oklch(0.28 0.01 240);
+  --mmc-bg: oklch(0.99 0.005 95);
+  --mmc-secondary: oklch(0.96 0.005 95);
+  --mmc-border: oklch(0.92 0.005 240);
+  --mmc-card: oklch(1 0 0);
+  --mmc-muted-fg: oklch(0.45 0.01 240);
+  --mmc-shadow-card: 0 1px 2px oklch(0.2 0.02 150 / 0.04), 0 8px 24px -8px oklch(0.2 0.02 150 / 0.08);
+  --mmc-shadow-elevated: 0 2px 4px oklch(0.2 0.02 150 / 0.06), 0 24px 48px -16px oklch(0.2 0.02 150 / 0.18);
+  --mmc-shadow-emerald: 0 10px 40px -10px oklch(0.42 0.12 158 / 0.45);
+}
+
 /* Scrollbar discreta */
 ::-webkit-scrollbar {
   width: 6px;
