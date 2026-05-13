@@ -601,9 +601,10 @@ function Oferta() {
         <div className="mt-14 grid gap-6 lg:grid-cols-2">
           {/* PACOTE */}
           <Card premium className="relative p-8 lg:scale-[1.02]">
-            <div className="absolute right-6 top-6">
+            <div className="mb-3 flex items-start justify-between gap-3">
+              <h3 className="text-2xl font-bold">Pacote com 5 vídeos</h3>
               <span
-                className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
+                className="inline-flex shrink-0 items-center gap-1 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
                 style={{
                   background: "linear-gradient(to right, var(--vp-primary), var(--vp-accent))",
                   color: "var(--vp-primary-fg)",
@@ -612,8 +613,7 @@ function Oferta() {
                 <Star className="h-3 w-3 fill-current" /> Mais vantajoso
               </span>
             </div>
-            <h3 className="text-2xl font-bold">Pacote com 5 vídeos</h3>
-            <div className="mt-4 flex items-baseline gap-2">
+            <div className="flex items-baseline gap-2">
               <span className="text-5xl font-bold" style={{ color: "var(--vp-primary)" }}>R$ 997</span>
               <span className="text-sm" style={{ color: "var(--vp-muted-fg)" }}>à vista</span>
             </div>
