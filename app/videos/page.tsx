@@ -151,38 +151,35 @@ function SectionTag({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ─── Paused-video mockup (CSS only) ───────────────────────────────────── */
+/* ─── Paused-video mockup (real images) ────────────────────────────────── */
 
 const reelScenes = [
   {
     tilt: "-rotate-6 -translate-y-4",
-    gradient: "linear-gradient(160deg, oklch(0.28 0.12 200), oklch(0.18 0.06 180))",
-    accent: "oklch(0.72 0.17 160)",
+    src: "/images/reel-01.jpg",
     label: "Reel 01",
     caption: "ATENÇÃO",
     progress: 45,
     time: "0:23",
-    metric: "+ retenção",
+    accent: "oklch(0.72 0.17 160)",
   },
   {
     tilt: "rotate-2 translate-y-2 scale-105 z-10",
-    gradient: "linear-gradient(160deg, oklch(0.30 0.10 260), oklch(0.18 0.06 230))",
-    accent: "oklch(0.78 0.09 80)",
+    src: "/images/reel-02.jpg",
     label: "Reel 02",
     caption: "RESULTADOS",
     progress: 62,
     time: "0:41",
-    metric: "+ alcance",
+    accent: "oklch(0.78 0.09 80)",
   },
   {
     tilt: "rotate-6 -translate-y-2",
-    gradient: "linear-gradient(160deg, oklch(0.26 0.10 150), oklch(0.18 0.08 160))",
-    accent: "oklch(0.72 0.17 160)",
+    src: "/images/reel-03.jpg",
     label: "Reel 03",
     caption: "SAIBA MAIS",
     progress: 30,
     time: "0:18",
-    metric: "+ clareza",
+    accent: "oklch(0.72 0.17 160)",
   },
 ];
 
@@ -192,73 +189,57 @@ function ReelMockup({ scene }: { scene: typeof reelScenes[number] }) {
 
   return (
     <div
-      className={`group relative aspect-[9/16] w-1/3 transform rounded-2xl border transition-all duration-500 hover:scale-110 ${scene.tilt}`}
+      className={`group relative aspect-[9/16] w-1/3 transform rounded-2xl border overflow-hidden transition-all duration-500 hover:scale-110 ${scene.tilt}`}
       style={{
-        background: scene.gradient,
         borderColor: "oklch(1 0 0 / 0.12)",
         boxShadow: "var(--vp-shadow-card)",
       }}
     >
-      {/* scanlines overlay */}
-      <div
-        className="absolute inset-0 rounded-2xl opacity-10 pointer-events-none"
-        style={{
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 3px, oklch(0 0 0 / 0.4) 3px, oklch(0 0 0 / 0.4) 4px)",
-        }}
+      {/* imagem real de fundo */}
+      <Image
+        src={scene.src}
+        alt={scene.label}
+        fill
+        className="object-cover object-top"
+        sizes="(max-width: 640px) 33vw, 200px"
       />
 
       {/* vignette */}
-      <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-black/30 via-transparent to-black/70" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/75" />
 
       {/* top label */}
-      <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur">
-        <span
-          className="h-1.5 w-1.5 rounded-full"
-          style={{ backgroundColor: scene.accent }}
-        />
+      <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur z-10">
+        <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: scene.accent }} />
         {scene.label}
       </div>
 
-      {/* simulated content lines */}
-      <div className="absolute inset-x-3 top-10 space-y-1.5">
-        <div className="h-1.5 w-4/5 rounded-full bg-white/15" />
-        <div className="h-1.5 w-3/5 rounded-full bg-white/10" />
-      </div>
-      <div className="absolute inset-x-3 top-24 space-y-1.5">
-        <div className="h-6 w-full rounded-md bg-white/8" />
-        <div className="h-6 w-4/5 rounded-md bg-white/6" />
-        <div className="h-6 w-3/5 rounded-md bg-white/5" />
-      </div>
-
       {/* pause icon — center */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center z-10">
         <div
-          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/50 backdrop-blur-sm"
-          style={{ boxShadow: `0 0 20px ${scene.accent}60` }}
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-white/30 bg-black/50 backdrop-blur-sm"
+          style={{ boxShadow: `0 0 24px ${scene.accent}80` }}
         >
           <Pause className="h-4 w-4 fill-white text-white" />
         </div>
       </div>
 
       {/* caption */}
-      <div className="absolute bottom-14 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white px-2 py-0.5 text-[9px] font-bold text-black">
+      <div className="absolute bottom-14 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-white px-2 py-0.5 text-[9px] font-bold text-black z-10">
         {scene.caption}
       </div>
 
       {/* timestamp */}
-      <div className="absolute bottom-6 right-2 text-[9px] font-mono text-white/70">
+      <div className="absolute bottom-6 right-2 text-[9px] font-mono text-white/70 z-10">
         {scene.time}
       </div>
 
       {/* progress bar */}
-      <div className="absolute bottom-2 left-2 right-2 flex gap-0.5">
+      <div className="absolute bottom-2 left-2 right-2 flex gap-0.5 z-10">
         {bars.map((_, j) => (
           <div
             key={j}
             className="h-1 flex-1 rounded-full"
-            style={{
-              backgroundColor: j < filled ? scene.accent : "oklch(1 0 0 / 0.2)",
-            }}
+            style={{ backgroundColor: j < filled ? scene.accent : "oklch(1 0 0 / 0.25)" }}
           />
         ))}
       </div>
