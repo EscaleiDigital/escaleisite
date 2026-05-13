@@ -373,7 +373,7 @@ function Hero() {
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <Btn href={LINK_PACOTE} size="lg" className="sm:flex-1 justify-center">
-              Comprar pacote com 5 vídeos <ArrowRight className="h-5 w-5" />
+              Comprar 5 vídeos por R$ 997 <ArrowRight className="h-5 w-5" />
             </Btn>
             <Btn href={LINK_AVULSO} size="lg" variant="outline" className="sm:flex-1 justify-center">
               Comprar vídeo avulso
@@ -629,7 +629,7 @@ function Oferta() {
               ))}
             </ul>
             <Btn href={LINK_PACOTE} size="lg" className="mt-8 w-full justify-center">
-              Comprar pacote por R$ 997 <ArrowRight className="h-5 w-5" />
+              Comprar 5 vídeos por R$ 997 <ArrowRight className="h-5 w-5" />
             </Btn>
             <p className="mt-3 text-center text-xs" style={{ color: "var(--vp-muted-fg)" }}>
               Os 5 vídeos devem ser solicitados e produzidos em até 30 dias após a contratação.
@@ -872,7 +872,7 @@ function FinalCTA() {
         </p>
         <div className="flex flex-col gap-3 items-center">
           <Btn href={LINK_PACOTE} size="lg" className="w-full sm:w-auto sm:px-10 justify-center">
-            Comprar pacote com 5 vídeos por R$ 997 <ArrowRight className="h-5 w-5" />
+            Comprar 5 vídeos por R$ 997 <ArrowRight className="h-5 w-5" />
           </Btn>
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
             <Btn href={LINK_AVULSO} size="lg" variant="outline" className="w-full sm:w-auto justify-center">
