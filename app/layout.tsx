@@ -10,6 +10,11 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
+  verification: {
+    other: {
+      "facebook-domain-verification": "o8axqef5egcmicwvv53w3fd57iiw1j",
+    },
+  },
   title: "Escalei Digital | Máquina de Vendas para empresas que querem escala",
   description:
     "A Escalei estrutura aquisição, operação comercial, CRM e rotina de performance em uma Máquina de Vendas para empresas que querem crescer com mais previsibilidade, organização e escala.",
