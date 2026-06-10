@@ -20,7 +20,7 @@ const plans: Plan[] = [
   {
     id: "start",
     name: "Plano Start",
-    price: "A partir de R$ 3.500 / mês",
+    price: "Sob consulta",
     tagline:
       "Para empresas que precisam estruturar a base de aquisição e começar a operar com mais inteligência e previsibilidade.",
     features: [
@@ -39,7 +39,7 @@ const plans: Plan[] = [
   {
     id: "performance",
     name: "Plano Performance",
-    price: "A partir de R$ 7.000 / mês",
+    price: "Sob consulta",
     tagline:
       "Para empresas que já investem e querem integrar aquisição, processo comercial e performance com mais profundidade.",
     highlight: true,
@@ -61,7 +61,7 @@ const plans: Plan[] = [
   {
     id: "escala",
     name: "Plano Escala",
-    price: "A partir de R$ 12.000 / mês",
+    price: "Sob consulta",
     tagline:
       "Para empresas que precisam de uma estrutura mais robusta, com CRM, treinamento, operação e estratégia integrados.",
     features: [
