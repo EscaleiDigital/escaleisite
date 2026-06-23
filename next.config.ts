@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         source: '/franqueados',
         destination: '/dashboard-drywash.html',
       },
+      {
+        source: '/softcut',
+        destination: '/dashboard-softcut.html',
+      },
     ]
   },
 };
