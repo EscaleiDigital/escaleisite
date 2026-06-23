@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      {
+        source: '/franqueados',
+        destination: '/dashboard-drywash.html',
+      },
+    ]
+  },
 };
 
 export default nextConfig;
