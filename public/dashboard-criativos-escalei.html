@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Criativos — Escalei Digital</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0d1117;
+  --surface:   #161b22;
+  --surface2:  #1c2128;
+  --border:    #30363d;
+  --border2:   #21262d;
+  --accent:    #0B6201;
+  --accent-hl: #12880a;
+  --text:      #e6edf3;
+  --muted:     #8b949e;
+  --danger:    #da3633;
+  --tag-video:  #1d4ed8;
+  --tag-img:    #065f46;
+  --tag-ig:     #6b21a8;
+  --tag-car:    #92400e;
+  --tag-prod:   #1e3a5f;
+  --tag-cat:    #4a1942;
+}
+
+body {
+  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.header-logo {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 600; font-size: 15px; color: var(--text); white-space: nowrap;
+}
+.logo-dot {
+  width: 22px; height: 22px; background: var(--accent); border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+}
+.header-title { color: var(--muted); font-size: 13px; font-weight: 400; }
+.header-spacer { flex: 1; }
+.filter-group { display: flex; align-items: center; gap: 8px; }
+.filter-group label { color: var(--muted); font-size: 12px; }
+.filter-select {
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+  border-radius: 6px; padding: 4px 8px; font-size: 13px; cursor: pointer;
+}
+.filter-select:focus { outline: 1px solid var(--accent); }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 6px;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  border: 1px solid transparent;
+  transition: background .15s, border-color .15s;
+}
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent-hl); }
+.btn-primary:hover { background: var(--accent-hl); }
+.btn-ghost { background: transparent; color: var(--muted); border-color: var(--border); }
+.btn-ghost:hover { background: var(--surface2); color: var(--text); }
+
+.tabs-wrap {
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  overflow-x: auto; scrollbar-width: none;
+}
+.tabs-wrap::-webkit-scrollbar { display: none; }
+.tabs { display: flex; gap: 2px; padding: 0 16px; min-width: max-content; }
+.tab {
+  padding: 10px 14px; font-size: 12.5px; font-weight: 500; color: var(--muted);
+  cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+  transition: color .12s, border-color .12s; user-select: none;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--text); border-bottom-color: var(--accent); }
+.tab .count {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--surface2); color: var(--muted); border-radius: 10px;
+  font-size: 10px; min-width: 18px; height: 16px; padding: 0 4px; margin-left: 5px;
+}
+.tab.active .count { background: var(--accent); color: #fff; }
+
+.main { padding: 20px; max-width: 1400px; margin: 0 auto; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+.toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px; gap: 12px;
+}
+.toolbar-left { display: flex; align-items: center; gap: 10px; }
+.client-name { font-weight: 600; font-size: 15px; }
+.client-code {
+  font-size: 12px; color: var(--muted); background: var(--surface2);
+  padding: 2px 7px; border-radius: 4px; font-family: monospace;
+}
+.showing-count { color: var(--muted); font-size: 12px; }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+thead tr { background: var(--surface); border-bottom: 1px solid var(--border); }
+th {
+  padding: 9px 14px; text-align: left; font-size: 11.5px; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: .04em;
+  white-space: nowrap; cursor: pointer; user-select: none;
+}
+th:hover { color: var(--text); }
+th.sort-asc::after  { content: ' ▲'; font-size: 9px; }
+th.sort-desc::after { content: ' ▼'; font-size: 9px; }
+tbody tr { border-bottom: 1px solid var(--border2); transition: background .1s; }
+tbody tr:hover { background: var(--surface2); }
+tbody tr:last-child { border-bottom: none; }
+td { padding: 9px 14px; vertical-align: middle; }
+.cod-cell { font-family: monospace; font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+.date-cell { white-space: nowrap; color: var(--muted); font-size: 12.5px; }
+
+.badge {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+}
+.badge-video   { background: var(--tag-video); color: #93c5fd; }
+.badge-img     { background: var(--tag-img);   color: #6ee7b7; }
+.badge-ig      { background: var(--tag-ig);    color: #d8b4fe; }
+.badge-car     { background: var(--tag-car);   color: #fde68a; }
+.badge-prod    { background: var(--tag-prod);  color: #93c5fd; }
+.badge-cat     { background: var(--tag-cat);   color: #f0abfc; }
+.badge-default { background: var(--surface2);  color: var(--muted); }
+
+.size-cell { font-size: 12.5px; color: var(--muted); }
+.obs-cell { font-size: 12.5px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.link-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: var(--accent-hl); text-decoration: none; font-size: 12px; font-weight: 500;
+}
+.link-btn:hover { text-decoration: underline; }
+.actions-cell { white-space: nowrap; }
+.icon-btn {
+  background: none; border: none; cursor: pointer; color: var(--muted);
+  padding: 4px 6px; border-radius: 4px; font-size: 13px;
+  transition: color .12s, background .12s;
+}
+.icon-btn:hover { background: var(--surface2); color: var(--text); }
+.icon-btn.del:hover { color: var(--danger); }
+
+.empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty p { font-size: 13px; margin-top: 10px; }
+.loading { text-align: center; padding: 60px 20px; color: var(--muted); font-size: 13px; }
+
+.overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6);
+  z-index: 100; align-items: center; justify-content: center;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  width: 500px; max-width: calc(100vw - 32px); max-height: 90vh; overflow-y: auto;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+}
+.modal-title { font-weight: 600; font-size: 15px; }
+.modal-close {
+  background: none; border: none; cursor: pointer; color: var(--muted);
+  font-size: 20px; line-height: 1; padding: 4px; border-radius: 4px;
+}
+.modal-close:hover { color: var(--text); }
+.modal-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 12px; font-weight: 600; color: var(--muted); }
+.form-input, .form-select, .form-textarea {
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text);
+  border-radius: 6px; padding: 8px 10px; font-size: 13px; font-family: inherit; width: 100%;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: 1px solid var(--accent); border-color: var(--accent);
+}
+.form-textarea { resize: vertical; min-height: 70px; }
+.modal-footer {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 14px 20px; border-top: 1px solid var(--border);
+}
+
+.confirm-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6);
+  z-index: 200; align-items: center; justify-content: center;
+}
+.confirm-overlay.open { display: flex; }
+.confirm-box {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  width: 340px; max-width: calc(100vw - 32px); padding: 24px; text-align: center;
+}
+.confirm-box h3 { font-size: 15px; margin-bottom: 8px; }
+.confirm-box p  { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.confirm-actions { display: flex; gap: 8px; justify-content: center; }
+.btn-del { background: var(--danger); color: #fff; border-color: var(--danger); }
+.btn-del:hover { filter: brightness(1.1); }
+
+#toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: #1f2937; color: #f9fafb; border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 18px; font-size: 13px; z-index: 300;
+  opacity: 0; transition: opacity .25s; pointer-events: none; white-space: nowrap;
+}
+#toast.show { opacity: 1; }
+
+.api-status {
+  position: fixed; bottom: 14px; right: 16px; font-size: 11px; color: var(--muted);
+  display: flex; align-items: center; gap: 5px;
+}
+.api-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.api-dot.ok  { background: #22c55e; }
+.api-dot.err { background: var(--danger); }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo">
+    <div class="logo-dot">E</div>
+    Escalei Digital
+    <span class="header-title">/ Criativos</span>
+  </div>
+  <div class="header-spacer"></div>
+  <div class="filter-group">
+    <label for="monthFilter">Período:</label>
+    <select id="monthFilter" class="filter-select">
+      <option value="">Todos os períodos</option>
+    </select>
+  </div>
+</header>
+
+<div class="tabs-wrap"><div class="tabs" id="tabs"></div></div>
+<div class="main" id="panels"></div>
+
+<!-- Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modalTitle">Novo Criativo</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="fId">
+      <input type="hidden" id="fClienteCod">
+      <div class="form-group">
+        <label class="form-label">Código *</label>
+        <input class="form-input" id="fCodigo" placeholder="Ex: AD193 ou ad01_img">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipo *</label>
+          <select class="form-select" id="fTipo">
+            <option value="">— selecione —</option>
+            <option>Vídeo</option>
+            <option>Imagem</option>
+            <option>Publicação Instagram</option>
+            <option>Carrossel</option>
+            <option>Conjunto de Produtos</option>
+            <option>Catálogo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tamanho</label>
+          <select class="form-select" id="fTamanho">
+            <option value="">— selecione —</option>
+            <option>Feed/Stories</option>
+            <option>Stories</option>
+            <option>Advantage+</option>
+            <option>Reels</option>
+            <option>Quadrado</option>
+            <option>Retrato</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Data de Entrada</label>
+        <input class="form-input" id="fData" type="date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Observações</label>
+        <textarea class="form-textarea" id="fObs" placeholder="Contexto, variações, segmentação..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Link (Drive ou Instagram)</label>
+        <input class="form-input" id="fLink" type="url" placeholder="https://...">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveRecord()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm delete -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3>Excluir criativo?</h3>
+    <p>Essa ação não pode ser desfeita.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn btn-del" onclick="confirmDelete()">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div class="api-status"><div class="api-dot" id="apiDot"></div><span id="apiLabel">conectando…</span></div>
+
+<script>
+const NOCO_URL   = 'https://escaleidigital-nocodb.wwvbqs.easypanel.host';
+const NOCO_TOKEN = 'VgInY2zNCGoIpYGj3C7DiozuICbhyl7aEB6Mvxn_';
+const BASE_ID    = 'pu0vhq0gg73t7i2';
+const TABLE_ID   = 'mblnoupvagsqg2j';
+
+const CLIENTES = [
+  { cod:'001', nome:'Escalei Digital'     },
+  { cod:'058', nome:'Plastfrio'           },
+  { cod:'068', nome:'SoftCut'             },
+  { cod:'076', nome:'DryWash Franq.'      },
+  { cod:'093', nome:'Multieco'            },
+  { cod:'097', nome:'Impaktto Plásticos'  },
+  { cod:'098', nome:'Smart Garage'        },
+  { cod:'101', nome:'DryWash Brigadeiro'  },
+  { cod:'102', nome:'DryWash Casa Verde'  },
+  { cod:'106', nome:'DryWash WestPlaza'   },
+  { cod:'108', nome:'DryWash São Caetano' },
+  { cod:'109', nome:'Zion Automotivos'    },
+  { cod:'111', nome:'DryWash SP Market'   },
+];
+
+let allData     = {};
+let activeTab   = CLIENTES[0].cod;
+let filterMonth = '';
+let sortCol     = 'data_entrada';
+let sortDir     = 'desc';
+let deleteId    = null;
+
+async function init() {
+  buildSkeleton();
+  await loadAll();
+  buildMonthFilter();
+  renderAll();
+}
+
+function buildSkeleton() {
+  const tabs   = document.getElementById('tabs');
+  const panels = document.getElementById('panels');
+  CLIENTES.forEach((c, i) => {
+    allData[c.cod] = [];
+
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (i === 0 ? ' active' : '');
+    tab.dataset.cod = c.cod;
+    tab.innerHTML = `${c.cod} — ${c.nome} <span class="count" id="cnt-${c.cod}">0</span>`;
+    tab.onclick = () => switchTab(c.cod);
+    tabs.appendChild(tab);
+
+    const panel = document.createElement('div');
+    panel.className = 'panel' + (i === 0 ? ' active' : '');
+    panel.id = `panel-${c.cod}`;
+    panel.innerHTML = '<div class="loading">Carregando…</div>';
+    panels.appendChild(panel);
+  });
+}
+
+async function loadAll() {
+  const hdr = { 'xc-token': NOCO_TOKEN };
+  try {
+    const r = await fetch(`${NOCO_URL}/api/v1/db/data/noco/${BASE_ID}/${TABLE_ID}?limit=500&sort=data_entrada`, { headers: hdr });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const json = await r.json();
+    (json.list || []).forEach(row => {
+      const cod = row.cliente_cod;
+      if (cod && allData[cod] !== undefined) allData[cod].push(row);
+    });
+    setApi(true);
+  } catch (e) {
+    setApi(false, e.message);
+    // show error state in all panels
+    CLIENTES.forEach(c => {
+      document.getElementById(`panel-${c.cod}`).innerHTML =
+        `<div class="empty"><p>Erro ao conectar ao NocoDB.<br><small>${e.message}</small></p></div>`;
+    });
+  }
+}
+
+function setApi(ok, msg) {
+  document.getElementById('apiDot').className = 'api-dot ' + (ok ? 'ok' : 'err');
+  document.getElementById('apiLabel').textContent = ok ? 'NocoDB conectado' : 'offline — ' + (msg || '');
+}
+
+function filteredRows(cod) {
+  let rows = allData[cod] || [];
+  if (filterMonth) rows = rows.filter(r => (r.data_entrada || '').startsWith(filterMonth));
+  return [...rows].sort((a, b) => {
+    let va = a[sortCol] ?? '', vb = b[sortCol] ?? '';
+    const cmp = typeof va === 'number' ? va - vb : String(va).localeCompare(String(vb), 'pt');
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
+}
+
+function buildMonthFilter() {
+  const months = new Set();
+  Object.values(allData).flat().forEach(r => { if (r.data_entrada) months.add(r.data_entrada.slice(0,7)); });
+  const sel = document.getElementById('monthFilter');
+  [...months].sort().reverse().forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m;
+    const [y, mo] = m.split('-');
+    const lbl = new Date(y, mo-1).toLocaleString('pt-BR', { month:'long', year:'numeric' });
+    opt.textContent = lbl.charAt(0).toUpperCase() + lbl.slice(1);
+    sel.appendChild(opt);
+  });
+  sel.onchange = () => { filterMonth = sel.value; renderAll(); };
+}
+
+function renderAll() {
+  CLIENTES.forEach(c => {
+    const rows = filteredRows(c.cod);
+    document.getElementById(`cnt-${c.cod}`).textContent = rows.length;
+    renderPanel(c, rows);
+  });
+}
+
+function renderPanel(c, rows) {
+  const el = document.getElementById(`panel-${c.cod}`);
+  const addBtn = `<button class="btn btn-primary" onclick="openAdd('${c.cod}','${esc(c.nome)}')">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    Novo Criativo
+  </button>`;
+
+  const toolbar = `<div class="toolbar">
+    <div class="toolbar-left">
+      <span class="client-name">${esc(c.nome)}</span>
+      <span class="client-code">${c.cod}</span>
+      <span class="showing-count">${rows.length} criativo${rows.length !== 1 ? 's' : ''}${filterMonth ? ' neste período' : ''}</span>
+    </div>
+    ${addBtn}
+  </div>`;
+
+  if (!rows.length) {
+    el.innerHTML = toolbar + `<div class="empty">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".4"><rect x="2" y="3" width="20" height="18" rx="2"/><path d="M8 10h8M8 14h5"/></svg>
+      <p>Nenhum criativo cadastrado.</p>
+    </div>`;
+    return;
+  }
+
+  const th = (col, lbl) => {
+    const cls = sortCol === col ? (sortDir === 'asc' ? 'sort-asc' : 'sort-desc') : '';
+    return `<th class="${cls}" onclick="setSort('${col}')">${lbl}</th>`;
+  };
+
+  const trs = rows.map(r => {
+    const dt   = r.data_entrada ? fmtDate(r.data_entrada) : '—';
+    const tam  = r.tamanho || '—';
+    const obs  = r.observacoes || '';
+    const link = r.link
+      ? `<a href="${esc(r.link)}" target="_blank" rel="noopener" class="link-btn">
+           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+           Abrir</a>`
+      : '<span style="color:var(--muted);font-size:12px">—</span>';
+    return `<tr>
+      <td class="cod-cell">${esc(r.codigo||'')}</td>
+      <td class="date-cell">${dt}</td>
+      <td>${tipoBadge(r.tipo)}</td>
+      <td class="size-cell">${esc(tam)}</td>
+      <td class="obs-cell" title="${esc(obs)}">${esc(obs)||'—'}</td>
+      <td>${link}</td>
+      <td class="actions-cell">
+        <button class="icon-btn" onclick="openEdit(${r.Id})" title="Editar">✎</button>
+        <button class="icon-btn del" onclick="askDelete(${r.Id})" title="Excluir">✕</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = toolbar + `<div class="table-wrap"><table>
+    <thead><tr>${th('codigo','Código')}${th('data_entrada','Data')}${th('tipo','Tipo')}${th('tamanho','Tamanho')}<th>Obs.</th><th>Link</th><th></th></tr></thead>
+    <tbody>${trs}</tbody>
+  </table></div>`;
+}
+
+const BADGE_MAP = {
+  'Vídeo':                { cls:'badge-video', lbl:'Vídeo' },
+  'Imagem':               { cls:'badge-img',   lbl:'Imagem' },
+  'Publicação Instagram': { cls:'badge-ig',    lbl:'Pub. IG' },
+  'Carrossel':            { cls:'badge-car',   lbl:'Carrossel' },
+  'Conjunto de Produtos': { cls:'badge-prod',  lbl:'Produtos' },
+  'Catálogo':             { cls:'badge-cat',   lbl:'Catálogo' },
+};
+function tipoBadge(tipo) {
+  const t = BADGE_MAP[tipo] || { cls:'badge-default', lbl: tipo||'—' };
+  return `<span class="badge ${t.cls}">${t.lbl}</span>`;
+}
+function fmtDate(d) {
+  const [y,m,day] = d.split('-'); return `${day}/${m}/${y}`;
+}
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function setSort(col) {
+  sortDir = sortCol === col ? (sortDir === 'asc' ? 'desc' : 'asc') : 'asc';
+  sortCol = col;
+  renderAll();
+}
+function switchTab(cod) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.cod === cod));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === `panel-${cod}`));
+  activeTab = cod;
+}
+
+function openAdd(cod, nome) {
+  document.getElementById('modalTitle').textContent = `Novo Criativo — ${nome}`;
+  document.getElementById('fId').value = '';
+  document.getElementById('fClienteCod').value = cod;
+  document.getElementById('fCodigo').value = '';
+  document.getElementById('fTipo').value = '';
+  document.getElementById('fTamanho').value = '';
+  document.getElementById('fData').value = new Date().toISOString().slice(0,10);
+  document.getElementById('fObs').value = '';
+  document.getElementById('fLink').value = '';
+  document.getElementById('overlay').classList.add('open');
+}
+function openEdit(id) {
+  const rec = Object.values(allData).flat().find(r => r.Id === id);
+  if (!rec) return;
+  const c = CLIENTES.find(x => x.cod === rec.cliente_cod);
+  document.getElementById('modalTitle').textContent = `Editar — ${rec.codigo}`;
+  document.getElementById('fId').value = id;
+  document.getElementById('fClienteCod').value = rec.cliente_cod;
+  document.getElementById('fCodigo').value  = rec.codigo || '';
+  document.getElementById('fTipo').value    = rec.tipo    || '';
+  document.getElementById('fTamanho').value = rec.tamanho || '';
+  document.getElementById('fData').value    = rec.data_entrada || '';
+  document.getElementById('fObs').value     = rec.observacoes  || '';
+  document.getElementById('fLink').value    = rec.link         || '';
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+
+async function saveRecord() {
+  const id      = document.getElementById('fId').value;
+  const cod     = document.getElementById('fClienteCod').value;
+  const codigo  = document.getElementById('fCodigo').value.trim();
+  if (!codigo) { toast('Código é obrigatório.'); return; }
+  const c = CLIENTES.find(x => x.cod === cod);
+  const num = parseInt((codigo.match(/\d+/)||[0])[0], 10) || 0;
+  const body = {
+    codigo, codigo_num: num,
+    cliente_cod: cod, cliente_nome: c ? c.nome : '',
+    data_entrada: document.getElementById('fData').value    || null,
+    tipo:         document.getElementById('fTipo').value    || null,
+    tamanho:      document.getElementById('fTamanho').value || null,
+    observacoes:  document.getElementById('fObs').value.trim() || null,
+    link:         document.getElementById('fLink').value.trim() || null,
+    origem: 'manual',
+  };
+  const hdr   = { 'xc-token': NOCO_TOKEN, 'Content-Type': 'application/json' };
+  const isNew = !id;
+  const url   = isNew
+    ? `${NOCO_URL}/api/v1/db/data/noco/${BASE_ID}/${TABLE_ID}`
+    : `${NOCO_URL}/api/v1/db/data/noco/${BASE_ID}/${TABLE_ID}/${id}`;
+  try {
+    const r = await fetch(url, { method: isNew ? 'POST' : 'PATCH', headers: hdr, body: JSON.stringify(body) });
+    if (!r.ok) throw new Error(await r.text());
+    const saved = await r.json();
+    if (isNew) {
+      allData[cod].push(saved);
+    } else {
+      const idx = allData[cod].findIndex(x => x.Id === parseInt(id));
+      if (idx >= 0) allData[cod][idx] = { ...allData[cod][idx], ...body, Id: parseInt(id) };
+    }
+    closeModal();
+    renderAll();
+    toast(isNew ? 'Criativo adicionado.' : 'Criativo atualizado.');
+  } catch(e) { toast('Erro ao salvar: ' + e.message); }
+}
+
+function askDelete(id) { deleteId = id; document.getElementById('confirmOverlay').classList.add('open'); }
+function closeConfirm() { deleteId = null; document.getElementById('confirmOverlay').classList.remove('open'); }
+async function confirmDelete() {
+  if (!deleteId) return;
+  const id = deleteId;
+  try {
+    const r = await fetch(`${NOCO_URL}/api/v1/db/data/noco/${BASE_ID}/${TABLE_ID}/${id}`,
+      { method: 'DELETE', headers: { 'xc-token': NOCO_TOKEN } });
+    if (!r.ok) throw new Error(await r.text());
+    for (const cod in allData) allData[cod] = allData[cod].filter(x => x.Id !== id);
+    closeConfirm();
+    renderAll();
+    toast('Criativo excluído.');
+  } catch(e) { toast('Erro ao excluir: ' + e.message); }
+}
+
+let _toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeConfirm(); }
+});
+
+init();
+</script>
+</body>
+</html>
