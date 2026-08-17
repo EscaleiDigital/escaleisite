@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -85,6 +85,48 @@
   .tab:hover { color: var(--verde); }
   .tab.active { color: var(--verde); border-bottom-color: var(--verde); }
 
+  /* MODO SWITCHER */
+  .modo-switch {
+    background: var(--verde-escuro);
+    padding: 0 32px;
+    display: flex; gap: 4px;
+  }
+  .modo-btn {
+    padding: 12px 20px; font-size: 12.5px; font-weight: 700;
+    color: #9ca3af; background: none; border: none; cursor: pointer;
+    border-radius: 8px 8px 0 0; transition: all 0.2s; font-family: 'Montserrat', sans-serif;
+  }
+  .modo-btn:hover { color: #d1d5db; }
+  .modo-btn.active { color: var(--verde-escuro); background: var(--fundo); }
+
+  /* UNIDADE SELECT (DryWash Oficial) */
+  .unidade-select-wrap {
+    background: var(--branco);
+    padding: 14px 32px;
+    border-bottom: 2px solid var(--cinza-borda);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .unidade-select-wrap label { font-size: 12px; font-weight: 600; color: var(--cinza); text-transform: uppercase; letter-spacing: 0.5px; }
+  .unidade-select-wrap select {
+    border: 1.5px solid var(--cinza-borda); border-radius: 8px;
+    padding: 8px 14px; font-family: 'Montserrat', sans-serif; font-size: 13px;
+    color: var(--verde-escuro); background: var(--branco); outline: none; cursor: pointer; min-width: 260px;
+  }
+  .unidade-select-wrap select:focus { border-color: var(--verde); }
+
+  /* INSTITUCIONAL BLOCKS */
+  .inst-block { margin-bottom: 30px; }
+  .inst-block-title {
+    font-size: 14px; font-weight: 800; color: var(--verde-escuro);
+    margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+  }
+  .inst-block-badge {
+    font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 10px;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  .inst-block-badge.google { background: #fde8e6; color: #ea4335; }
+  .inst-block-badge.meta   { background: #e7f0fd; color: #1877f2; }
+
   /* CONTENT */
   .content { padding: 28px 32px; max-width: 1400px; margin: 0 auto; }
 
@@ -153,6 +195,10 @@
     .tabs { padding: 0 14px; scrollbar-width: none; }
     .tabs::-webkit-scrollbar { display: none; }
     .tab { padding: 12px 14px; font-size: 12px; }
+    .modo-switch { padding: 0 14px; }
+    .modo-btn { padding: 10px 14px; font-size: 11.5px; }
+    .unidade-select-wrap { padding: 10px 14px; flex-wrap: wrap; }
+    .unidade-select-wrap select { min-width: 0; flex: 1; }
     .content { padding: 14px; }
     .kpis { gap: 10px; margin-bottom: 14px; }
     .kpi-card { padding: 14px 12px; }
@@ -289,12 +335,22 @@
   <span class="periodo-info" id="periodoInfo"></span>
 </div>
 
+<div class="modo-switch">
+  <button class="modo-btn active" id="modoBtnFranq" onclick="switchModo('franq')">Franqueados</button>
+  <button class="modo-btn" id="modoBtnOficial" onclick="switchModo('oficial')">DryWash Oficial</button>
+</div>
+
 <div class="tabs" id="tabs">
   <div class="tab active" data-codigo="101" onclick="selectTab(this)">Brigadeiro</div>
   <div class="tab" data-codigo="102" onclick="selectTab(this)">Carrefour</div>
   <div class="tab" data-codigo="106" onclick="selectTab(this)">West Plaza</div>
   <div class="tab" data-codigo="108" onclick="selectTab(this)">São Caetano</div>
   <div class="tab" data-codigo="111" onclick="selectTab(this)">SP Market</div>
+</div>
+
+<div class="unidade-select-wrap" id="unidadeSelectWrap" style="display:none;">
+  <label>Unidade</label>
+  <select id="unidadeSelect" onchange="selectUnidadeOficial(this.value)"></select>
 </div>
 
 <div class="content" id="content">
@@ -311,17 +367,83 @@
 
 <script>
 var WEBHOOK = 'https://escaleidigital-n8n-webhook.wwvbqs.easypanel.host/webhook/dashboard-drywash';
+var WEBHOOK_OFICIAL = 'https://escaleidigital-n8n-webhook.wwvbqs.easypanel.host/webhook/dashboard-drywash-oficial';
 var codigoAtivo = '101';
 var _cache = {};
+var MODO = 'franq';
+var _cacheOficial = null;
+var unidadeAtiva = 'institucional';
+
+var UNIDADES_OFICIAL = [
+  ['institucional', '🏢 Institucional / Multi-unidade'],
+  ['iguatemi', 'Iguatemi SP'],
+  ['iguatemi-alphaville', 'Iguatemi Alphaville'],
+  ['morumbi', 'Morumbi'],
+  ['eldorado', 'Eldorado'],
+  ['villa-lobos', 'Villa Lobos'],
+  ['patio-paulista', 'Pátio Paulista'],
+  ['marketplace', 'Marketplace (Lapa)'],
+  ['jardim-sul', 'Jardim Sul'],
+  ['vila-olimpia', 'Vila Olímpia'],
+  ['analia-franco', 'Analia Franco'],
+  ['center-norte', 'Center Norte'],
+  ['sao-caetano', 'São Caetano'],
+  ['campinas', 'Campinas'],
+  ['sorocaba', 'Sorocaba'],
+  ['centervale', 'CenterVale (SJC)'],
+  ['metropole', 'Metrópole (Sto. Amaro)'],
+];
+
+(function() {
+  var sel = document.getElementById('unidadeSelect');
+  UNIDADES_OFICIAL.forEach(function(u) {
+    var opt = document.createElement('option');
+    opt.value = u[0]; opt.textContent = u[1];
+    sel.appendChild(opt);
+  });
+})();
 
 // Default dates: current month start → today
-(function() {
+function setDatasPadrao(modo) {
   var hoje = new Date();
   var ate = hoje.toISOString().split('T')[0];
-  var de = new Date(hoje.getFullYear(), hoje.getMonth(), 1).toISOString().split('T')[0];
+  var de;
+  if (modo === 'oficial') {
+    de = '2026-01-01';
+  } else {
+    de = new Date(hoje.getFullYear(), hoje.getMonth(), 1).toISOString().split('T')[0];
+  }
   document.getElementById('dtDe').value = de;
   document.getElementById('dtAte').value = ate;
-})();
+}
+setDatasPadrao('franq');
+
+function switchModo(modo) {
+  if (modo === MODO) return;
+  MODO = modo;
+  document.getElementById('modoBtnFranq').classList.toggle('active', modo === 'franq');
+  document.getElementById('modoBtnOficial').classList.toggle('active', modo === 'oficial');
+  document.getElementById('tabs').style.display = modo === 'franq' ? 'flex' : 'none';
+  document.getElementById('unidadeSelectWrap').style.display = modo === 'oficial' ? 'flex' : 'none';
+  setDatasPadrao(modo);
+  document.getElementById('periodoInfo').textContent = '';
+
+  if (modo === 'oficial') {
+    if (_cacheOficial) {
+      renderOficial(unidadeAtiva);
+    } else {
+      document.getElementById('content').innerHTML =
+        '<div class="status-box"><div>Clique em <strong>Buscar</strong> para carregar os dados da DryWash Oficial.</div></div>';
+    }
+  } else {
+    if (_cache[codigoAtivo]) {
+      renderData(_cache[codigoAtivo]);
+    } else {
+      document.getElementById('content').innerHTML =
+        '<div class="status-box"><div>Clique em <strong>Buscar</strong> para carregar os dados desta unidade.</div></div>';
+    }
+  }
+}
 
 function selectTab(el) {
   document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
@@ -335,16 +457,32 @@ function selectTab(el) {
   }
 }
 
+function selectUnidadeOficial(slug) {
+  unidadeAtiva = slug;
+  if (_cacheOficial) renderOficial(slug);
+}
+
 function buscar() {
   var de  = document.getElementById('dtDe').value;
   var ate = document.getElementById('dtAte').value;
   if (!de || !ate) { alert('Selecione as duas datas.'); return; }
   if (de > ate) { alert('A data inicial deve ser anterior à final.'); return; }
 
-  _cache = {};
   var btn = document.getElementById('btnBuscar');
   btn.disabled = true; btn.textContent = 'Carregando...';
 
+  if (MODO === 'oficial') {
+    document.getElementById('content').innerHTML =
+      '<div class="status-box"><div class="spinner"></div><div>Buscando dados da DryWash Oficial…</div></div>';
+    fetch(WEBHOOK_OFICIAL + '?desde=' + de + '&ate=' + ate)
+      .then(function(r) { return r.json(); })
+      .then(function(d) { _cacheOficial = d; })
+      .catch(function(e) { _cacheOficial = { _erro: String(e) }; })
+      .finally(function() { finalizarBuscaOficial(de, ate, btn); });
+    return;
+  }
+
+  _cache = {};
   document.getElementById('content').innerHTML =
     '<div class="status-box"><div class="spinner"></div><div>Buscando dados de todas as unidades…</div></div>';
 
@@ -373,6 +511,210 @@ function finalizarBusca(de, ate, btn) {
   var hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   document.getElementById('lastUpdate').textContent = 'Atualizado ' + hora;
   renderData(_cache[codigoAtivo] || {});
+}
+
+function finalizarBuscaOficial(de, ate, btn) {
+  btn.disabled = false; btn.textContent = 'Buscar';
+  var d1 = new Date(de + 'T12:00:00Z');
+  var d2 = new Date(ate + 'T12:00:00Z');
+  var dias = Math.round((d2 - d1) / 86400000) + 1;
+  document.getElementById('periodoInfo').textContent =
+    dias + ' dias · vs ' + dias + ' dias anteriores';
+  var hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  document.getElementById('lastUpdate').textContent = 'Atualizado ' + hora;
+  renderOficial(unidadeAtiva);
+}
+
+// ── DryWash Oficial: render ─────────────────────────────────────────────
+
+function renderOficial(slug) {
+  var data = _cacheOficial;
+  if (!data || data._erro) {
+    document.getElementById('content').innerHTML =
+      '<div class="status-box"><div style="font-size:28px;margin-bottom:10px">⚠️</div>' +
+      '<div>Erro ao carregar: ' + esc((data && data._erro) || 'resposta inválida') + '</div></div>';
+    return;
+  }
+  if (slug === 'institucional') { renderInstitucional(data); return; }
+  renderUnidadeOficial(data, slug);
+}
+
+function periodHeaderHtml(nome, data) {
+  var html = '<div class="unit-header">';
+  html += '<h2>' + esc(nome) + '</h2>';
+  html += '<div class="period-labels">';
+  html += '<span class="period-label"><span class="period-dot cur"></span>Período atual: ' + fmtDate(data.desde) + ' a ' + fmtDate(data.ate) + '</span>';
+  html += '<span class="period-label"><span class="period-dot prev"></span>Período anterior: ' + fmtDate(data.prevDesde) + ' a ' + fmtDate(data.prevAte) + '</span>';
+  html += '</div></div>';
+  return html;
+}
+
+function renderUnidadeOficial(data, slug) {
+  var u = (data.unidades || {})[slug];
+  var label = (UNIDADES_OFICIAL.find(function(x) { return x[0] === slug; }) || [null, slug])[1];
+  var html = periodHeaderHtml(label, data);
+
+  if (!u) {
+    html += '<div class="section-empty">Sem dados de Google Ads ou Meta Ads para esta unidade no período selecionado.</div>';
+    document.getElementById('content').innerHTML = html;
+    return;
+  }
+
+  html += googleSectionHtml(u.google);
+  html += '<hr class="divider">';
+  html += metaMensagensSectionHtml(u.meta, 'Meta Ads — Película');
+
+  document.getElementById('content').innerHTML = html;
+}
+
+function googleSectionHtml(g, semHeader) {
+  var c = (g.cur  || {}).tot || {};
+  var p = (g.prev || {}).tot || {};
+  var camps = (g.cur || {}).camps || [];
+  var has = c.spend > 0;
+
+  var html = '<div class="section">';
+  if (!semHeader) html += '<div class="section-header"><div class="section-icon google">G</div><span class="section-title">Google Ads</span></div>';
+
+  if (!has) {
+    html += '<div class="section-empty">Sem dados de Google Ads neste período.</div></div>';
+    return html;
+  }
+
+  var kpis = [
+    { label: 'Valor Investido', cur: c.spend,      prev: p.spend,      fmt: 'brl', inv: false },
+    { label: 'Impressões',      cur: c.impressoes,  prev: p.impressoes, fmt: 'num', inv: false },
+    { label: 'Cliques',         cur: c.clicks,      prev: p.clicks,     fmt: 'num', inv: false },
+    { label: 'Conversões',      cur: c.conversoes,  prev: p.conversoes, fmt: 'num', inv: false },
+    { label: 'Custo/Conversão', cur: c.cpc,         prev: p.cpc,        fmt: 'brl', inv: true  },
+  ];
+  html += '<div class="kpis">' + kpis.map(kpiCard).join('') + '</div>';
+  html += campTable(camps, ['Campanha','Investido','Impressões','Cliques','Conversões','Custo/Conv'], function(row) {
+    var cpc = row.conversoes > 0 ? row.spend / row.conversoes : 0;
+    return '<td class="camp-name">' + esc(row.nome) + '</td>' +
+      '<td class="r num-bold" data-label="Investido">' + fmtBRL(row.spend) + '</td>' +
+      '<td class="r" data-label="Impressões">' + fmtNum(row.impressoes) + '</td>' +
+      '<td class="r" data-label="Cliques">' + fmtNum(row.clicks) + '</td>' +
+      '<td class="r num-bold" data-label="Conversões">' + fmtNum(row.conversoes) + '</td>' +
+      '<td class="r" data-label="Custo/Conv">' + fmtBRL(cpc) + '</td>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function metaMensagensSectionHtml(m, titulo, semHeader) {
+  var c = (m.cur  || {}).tot || {};
+  var p = (m.prev || {}).tot || {};
+  var camps = (m.cur || {}).camps || [];
+  var has = c.spend > 0;
+
+  var html = '<div class="section">';
+  if (!semHeader) html += '<div class="section-header"><div class="section-icon meta">M</div><span class="section-title">' + esc(titulo) + '</span></div>';
+
+  if (!has) {
+    html += '<div class="section-empty">Sem dados de Meta Ads neste período.</div></div>';
+    return html;
+  }
+
+  var kpis = [
+    { label: 'Valor Investido', cur: c.spend,     prev: p.spend,     fmt: 'brl', inv: false },
+    { label: 'Alcance',         cur: c.reach,     prev: p.reach,     fmt: 'num', inv: false },
+    { label: 'Cliques',         cur: c.clicks,    prev: p.clicks,    fmt: 'num', inv: false },
+    { label: 'Conversas',       cur: c.conversas, prev: p.conversas, fmt: 'num', inv: false },
+    { label: 'Custo/Conversa',  cur: c.cpl,       prev: p.cpl,       fmt: 'brl', inv: true  },
+  ];
+  html += '<div class="kpis">' + kpis.map(kpiCard).join('') + '</div>';
+  html += campTable(camps, ['Campanha','Investido','Alcance','Cliques','Conversas','Custo/Conv'], function(row) {
+    var cpl = row.conversas > 0 ? row.spend / row.conversas : 0;
+    return '<td class="camp-name">' + esc(row.nome) + '</td>' +
+      '<td class="r num-bold" data-label="Investido">' + fmtBRL(row.spend) + '</td>' +
+      '<td class="r" data-label="Alcance">' + fmtNum(row.reach) + '</td>' +
+      '<td class="r" data-label="Cliques">' + fmtNum(row.clicks) + '</td>' +
+      '<td class="r num-bold" data-label="Conversas">' + fmtNum(row.conversas) + '</td>' +
+      '<td class="r" data-label="Custo/Conv">' + fmtBRL(cpl) + '</td>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function metaTurbinadaSectionHtml(m, titulo) {
+  var c = (m.cur  || {}).tot || {};
+  var p = (m.prev || {}).tot || {};
+  var camps = (m.cur || {}).camps || [];
+
+  var kpis = [
+    { label: 'Valor Investido', cur: c.spend,       prev: p.spend,       fmt: 'brl', inv: false },
+    { label: 'Alcance',         cur: c.reach,       prev: p.reach,       fmt: 'num', inv: false },
+    { label: 'CTR',             cur: c.ctr_calc,    prev: p.ctr_calc,    fmt: 'pct', inv: false },
+    { label: 'Cliques',         cur: c.clicks,      prev: p.clicks,      fmt: 'num', inv: false },
+    { label: 'Engajamento',     cur: c.engajamento, prev: p.engajamento, fmt: 'num', inv: false },
+    { label: 'ThruPlay 50%',    cur: c.video_p50,   prev: p.video_p50,   fmt: 'num', inv: false },
+  ];
+  var html = '<div class="kpis">' + kpis.map(kpiCard).join('') + '</div>';
+  html += campTable(camps, ['Campanha','Investido','Alcance','CTR','Cliques','Engajamento','ThruPlay 50%'], function(row) {
+    return '<td class="camp-name">' + esc(row.nome) + '</td>' +
+      '<td class="r num-bold" data-label="Investido">' + fmtBRL(row.spend) + '</td>' +
+      '<td class="r" data-label="Alcance">' + fmtNum(row.reach) + '</td>' +
+      '<td class="r" data-label="CTR">' + (row.ctr || 0).toFixed(2) + '%</td>' +
+      '<td class="r" data-label="Cliques">' + fmtNum(row.clicks) + '</td>' +
+      '<td class="r" data-label="Engajamento">' + fmtNum(row.engajamento) + '</td>' +
+      '<td class="r" data-label="ThruPlay 50%">' + fmtNum(row.video_p50) + '</td>';
+  });
+  return html;
+}
+
+function metaAwarenessSectionHtml(m) {
+  var c = (m.cur  || {}).tot || {};
+  var p = (m.prev || {}).tot || {};
+  var camps = (m.cur || {}).camps || [];
+
+  var kpis = [
+    { label: 'Valor Investido', cur: c.spend,     prev: p.spend,     fmt: 'brl', inv: false },
+    { label: 'Alcance',         cur: c.reach,     prev: p.reach,     fmt: 'num', inv: false },
+    { label: 'Frequência',      cur: c.frequency, prev: p.frequency, fmt: 'dec', inv: false },
+    { label: 'CPM',             cur: c.cpm,       prev: p.cpm,       fmt: 'brl', inv: true  },
+  ];
+  var html = '<div class="kpis">' + kpis.map(kpiCard).join('') + '</div>';
+  html += campTable(camps, ['Campanha','Investido','Alcance','Frequência','CPM'], function(row) {
+    var freq = row.reach > 0 ? row.impressoes / row.reach : 0;
+    return '<td class="camp-name">' + esc(row.nome) + '</td>' +
+      '<td class="r num-bold" data-label="Investido">' + fmtBRL(row.spend) + '</td>' +
+      '<td class="r" data-label="Alcance">' + fmtNum(row.reach) + '</td>' +
+      '<td class="r" data-label="Frequência">' + freq.toFixed(2) + '</td>' +
+      '<td class="r" data-label="CPM">' + fmtBRL(row.cpm) + '</td>';
+  });
+  return html;
+}
+
+function renderInstitucional(data) {
+  var inst = data.institucional || {};
+  var html = periodHeaderHtml('Institucional / Multi-unidade', data);
+  html += '<div style="font-size:12px;color:var(--cinza);margin-bottom:20px;">Campanhas de branding, concorrentes, turbinadas e campanhas que somam mais de uma unidade em um único orçamento (não segmentáveis por unidade).</div>';
+
+  var chaves = Object.keys(inst);
+  var algo = false;
+  chaves.forEach(function(chave) {
+    var v = inst[chave];
+    var plat = v.plataforma;
+    var bloco = plat === 'google' ? v.google : v.meta;
+    var camps = (bloco.cur || {}).camps || [];
+    if (!camps.length) return;
+    algo = true;
+
+    html += '<div class="inst-block">';
+    html += '<div class="inst-block-title">' + esc(v.label) +
+      '<span class="inst-block-badge ' + plat + '">' + (plat === 'google' ? 'Google Ads' : 'Meta Ads') + '</span></div>';
+
+    if (v.tipo === 'conversao') html += googleSectionHtml(v.google, true);
+    else if (v.tipo === 'mensagens') html += metaMensagensSectionHtml(v.meta, '', true);
+    else if (v.tipo === 'turbinada') html += metaTurbinadaSectionHtml(v.meta, v.label);
+    else if (v.tipo === 'awareness') html += metaAwarenessSectionHtml(v.meta);
+
+    html += '</div>';
+  });
+
+  if (!algo) html += '<div class="section-empty">Sem campanhas institucionais no período selecionado.</div>';
+  document.getElementById('content').innerHTML = html;
 }
 
 function renderData(data) {
@@ -484,8 +826,8 @@ function renderData(data) {
 function kpiCard(k) {
   var cur  = parseFloat(k.cur  || 0);
   var prev = parseFloat(k.prev || 0);
-  var valStr  = k.fmt === 'brl' ? fmtBRL(cur)  : fmtNumFull(cur);
-  var prevStr = k.fmt === 'brl' ? fmtBRL(prev) : fmtNumFull(prev);
+  var valStr  = k.fmt === 'brl' ? fmtBRL(cur)  : k.fmt === 'pct' ? cur.toFixed(2) + '%'  : k.fmt === 'dec' ? cur.toFixed(2)  : fmtNumFull(cur);
+  var prevStr = k.fmt === 'brl' ? fmtBRL(prev) : k.fmt === 'pct' ? prev.toFixed(2) + '%' : k.fmt === 'dec' ? prev.toFixed(2) : fmtNumFull(prev);
 
   var delta = '—';
   var cls   = 'neutral';
