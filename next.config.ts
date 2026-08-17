@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/franqueados',
+        source: '/drywash',
         destination: '/dashboard-drywash.html',
       },
       {
