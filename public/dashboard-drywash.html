@@ -166,12 +166,10 @@
     display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
   }
   .section-icon {
-    width: 30px; height: 30px; border-radius: 7px;
+    width: 26px; height: 26px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 800;
   }
-  .section-icon.meta   { background: #1877f2; color: white; }
-  .section-icon.google { background: #ea4335; color: white; }
+  .section-icon img, .section-icon svg { width: 20px; height: 20px; }
   .section-title { font-size: 15px; font-weight: 700; color: var(--verde-escuro); }
   .section-empty {
     background: var(--branco); border-radius: 12px; padding: 32px;
@@ -209,7 +207,7 @@
     .table-wrap { overflow: visible; border-radius: 0; border: none; background: transparent; }
     table { background: transparent; }
     thead { display: none; }
-    tbody tr {
+    tbody tr, tfoot tr {
       display: block;
       background: var(--branco);
       border-radius: 10px;
@@ -220,6 +218,7 @@
     }
     tbody tr:last-child { border-bottom: 1.5px solid var(--cinza-borda); }
     tbody tr:hover { background: var(--branco); }
+    tfoot tr.tr-total { border: 1.5px solid var(--verde); }
 
     /* Primeira célula = cabeçalho do card */
     td.camp-name {
@@ -300,6 +299,9 @@
   tbody td.camp-name { white-space: normal; max-width: 280px; font-weight: 500; line-height: 1.4; }
   td.r { text-align: right; }
   .num-bold { font-weight: 700; }
+  tfoot tr.tr-total { background: var(--verde-claro); border-top: 2px solid var(--verde); }
+  tfoot tr.tr-total td { padding: 10px 14px; font-size: 12px; font-weight: 800; color: var(--verde-escuro); white-space: nowrap; }
+  tfoot tr.tr-total td.camp-name { font-weight: 800; }
 
   /* DIVIDER */
   .divider { border: none; border-top: 1.5px solid var(--cinza-borda); margin: 28px 0; }
@@ -587,22 +589,20 @@ function googleGeralSectionHtml(g) {
   var has = c.spend > 0;
 
   var html = '<div class="section"><div class="section-header">' +
-    '<div class="section-icon google">G</div><span class="section-title">Google Ads — Todas as Campanhas</span></div>';
+    '<div class="section-icon google"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAABJlBMVEUAAABAh/dChfRBhfRChfRChfVAhfRChfOImZRAg/P/1QBgjszRrzpChPT/wQDLrUBBhPNAgP/6vAPMrkBBhPT6vQD7vATYsjFAhfT7uwRNiOVBhPT8vQOSnYxAhvX/vwD7uwPvuBT7vASeoHz7uwNYi9b7vARvkrj//wD6vATktiP6vQJChfT7vAS2qF//uwD7uwNjj8j7uwNChfP7vARBhPNBhfT6uwL7uwT/vwD7vAPhuQ29tRuYsit/sDSksybKtxfuuwj6uwNChPT8vAOjsyZAqU00qFNNq0jJtxj8vANChfRlrD6vtCFBhfN7rzY0p1QzqFNChfM0p1KKsTAzqFKXsiszqFOqsyIyp1I/qU6NsCxDqUswp1AzqFNBhPQ0p1Izp1PWhmtgAAAAYnRSTlMAIJ/f/39vgGlABvmQcB367xCo/6A2//8wyP+/YP9QDOr/iP/4/0T/AtX/aGCQ/yn8/7ivSLDPcIAU8v/////////h4Jj//////1iQ///A4ECQ8MD/0P+wyWD/Onog8NCAoBgmF/QAAAGFSURBVHgB5dMDkgVBEEXR179zbOXYtm3b9vz9b2KiXZXN8OAsoHAjE7+EkTOJzJyBjArIVYhMcuQrQgbFpChBqtIyUphIVU6aCqSorCJNdQ2S1daRrh6JGriRhCYkaWZuIV0rErQxczsJHYjV2cXM3fIKswZxetjSS0JRbNI+tvWTSGsgWi076ihb2gH2DJJQgghDw+wZoSxpR9kTkXYsMqlHpo0eqXFWTaSmnZxizTQJMu0MK6LSzkIzx0LtPAklIqmur9IgYQGKRRaWgCISKuBbXlldW9/Y3Npm104pULMbn3Zv/+DQcnTMjhMAGCPh1E96dug5Z0szbBdxaS8PA9YdUw2wlcSM1NWh4mibeQ+u+ui014eqY15Zhsu4Id08LLeHqn1ehE+mNWE51NwNDyEg08Jyf6h6mIOigzQ3sDweqp6gEmkvYHk+VLy8QtMkF0/++g3CKQV24Xj/OPTcAtIneW6a4Hr37vhCWE09OT6bEHjO3x/eXl8hUkn9J+3Oj+H/+gZ3oF/rwfCXHQAAAABJRU5ErkJggg==" alt="Google Ads" width="20" height="20"></div><span class="section-title">Google Ads — Todas as Campanhas</span></div>';
 
   if (!has) {
     html += '<div class="section-empty">Sem dados de Google Ads neste período.</div></div>';
     return html;
   }
 
-  var kpis = [
-    { label: 'Orçamento/dia',    cur: c.orcamento,  prev: p.orcamento,  fmt: 'brl', inv: false },
-    { label: 'Valor Investido',  cur: c.spend,      prev: p.spend,      fmt: 'brl', inv: false },
-    { label: 'Impressões',       cur: c.impressoes, prev: p.impressoes, fmt: 'num', inv: false },
-    { label: 'Cliques',          cur: c.clicks,     prev: p.clicks,     fmt: 'num', inv: false },
-    { label: 'Conversões',       cur: c.conversoes, prev: p.conversoes, fmt: 'num', inv: false },
-    { label: 'Custo/Conversão',  cur: c.cpc,        prev: p.cpc,        fmt: 'brl', inv: true  },
-  ];
-  html += '<div class="kpis">' + kpis.map(kpiCard).join('') + '</div>';
+  var totalRow = '<td class="camp-name">Total</td>' +
+    '<td class="r" data-label="Orçamento">' + (c.orcamento > 0 ? fmtBRL(c.orcamento) : '—') + '</td>' +
+    '<td class="r num-bold" data-label="Investido">' + fmtBRL(c.spend) + '</td>' +
+    '<td class="r" data-label="Impressões">' + fmtNum(c.impressoes) + '</td>' +
+    '<td class="r" data-label="Cliques">' + fmtNum(c.clicks) + '</td>' +
+    '<td class="r num-bold" data-label="Conversões">' + fmtNum(c.conversoes) + '</td>' +
+    '<td class="r" data-label="Custo/Conv">' + fmtBRL(c.cpc) + '</td>';
   html += campTable(camps, ['Campanha','Orçamento','Investido','Impressões','Cliques','Conversões','Custo/Conv'], function(row) {
     return '<td class="camp-name">' + esc(row.nome) + '</td>' +
       '<td class="r" data-label="Orçamento">' + (row.orcamento > 0 ? fmtBRL(row.orcamento) : '—') + '</td>' +
@@ -611,7 +611,7 @@ function googleGeralSectionHtml(g) {
       '<td class="r" data-label="Cliques">' + fmtNum(row.clicks) + '</td>' +
       '<td class="r num-bold" data-label="Conversões">' + fmtNum(row.conversoes) + '</td>' +
       '<td class="r" data-label="Custo/Conv">' + fmtBRL(row.cpc) + '</td>';
-  });
+  }, totalRow);
   html += '</div>';
   return html;
 }
@@ -623,23 +623,23 @@ function metaGeralSectionHtml(m) {
   var has = c.spend > 0;
 
   var html = '<div class="section"><div class="section-header">' +
-    '<div class="section-icon meta">M</div><span class="section-title">Meta Ads — Todas as Campanhas</span></div>';
+    '<div class="section-icon meta"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="#0081FB" d="M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z"/></svg></div><span class="section-title">Meta Ads — Todas as Campanhas</span></div>';
 
   if (!has) {
     html += '<div class="section-empty">Sem dados de Meta Ads neste período.</div></div>';
     return html;
   }
 
-  var kpis = [
-    { label: 'Orçamento/dia',   cur: c.orcamento, prev: p.orcamento, fmt: 'brl', inv: false },
-    { label: 'Valor Investido', cur: c.spend,     prev: p.spend,     fmt: 'brl', inv: false },
-    { label: 'Alcance',         cur: c.reach,     prev: p.reach,     fmt: 'num', inv: false },
-    { label: 'CTR',             cur: c.ctr_calc,  prev: p.ctr_calc,  fmt: 'pct', inv: false },
-    { label: 'Cliques',         cur: c.clicks,    prev: p.clicks,    fmt: 'num', inv: false },
-    { label: 'CPM',             cur: c.cpm,       prev: p.cpm,       fmt: 'brl', inv: true  },
-  ];
-  html += '<div class="kpis">' + kpis.map(kpiCard).join('') + '</div>';
-  html += '<div style="font-size:11px;color:var(--cinza);margin:-6px 0 10px;">"Resultado" varia conforme o objetivo de cada campanha — engajamento/WhatsApp mostra conversas, reconhecimento mostra alcance, tráfego mostra visualizações da página de destino e posts do Instagram mostram cliques no link ou visitas ao Instagram.</div>';
+  html += '<div style="font-size:11px;color:var(--cinza);margin:0 0 10px;">"Resultado" varia conforme o objetivo de cada campanha — engajamento/WhatsApp mostra conversas, reconhecimento mostra alcance, tráfego mostra visualizações da página de destino e posts do Instagram mostram cliques no link ou visitas ao Instagram.</div>';
+  var totalRow = '<td class="camp-name">Total</td>' +
+    '<td class="r" data-label="Orçamento">' + (c.orcamento > 0 ? fmtBRL(c.orcamento) : '—') + '</td>' +
+    '<td class="r num-bold" data-label="Investido">' + fmtBRL(c.spend) + '</td>' +
+    '<td class="r" data-label="Alcance">' + fmtNum(c.reach) + '</td>' +
+    '<td class="r" data-label="CTR">' + (c.ctr_calc || 0).toFixed(2) + '%</td>' +
+    '<td class="r" data-label="Cliques">' + fmtNum(c.clicks) + '</td>' +
+    '<td class="r" data-label="CPM">' + fmtBRL(c.cpm) + '</td>' +
+    '<td class="r" data-label="Resultado">—</td>' +
+    '<td class="r" data-label="Custo/Resultado">—</td>';
   html += campTable(camps, ['Campanha','Orçamento','Investido','Alcance','CTR','Cliques','CPM','Resultado','Custo/Resultado'], function(row) {
     var custoTxt = row.resultadoValor > 0 ? (fmtBRL(row.custoPorResultado) + ' / ' + esc(row.resultadoLabel)) : '—';
     return '<td class="camp-name">' + esc(row.nome) + '</td>' +
@@ -651,7 +651,7 @@ function metaGeralSectionHtml(m) {
       '<td class="r" data-label="CPM">' + fmtBRL(row.cpm) + '</td>' +
       '<td class="r num-bold" data-label="Resultado">' + fmtNum(row.resultadoValor) + ' ' + esc(row.resultadoLabel) + '</td>' +
       '<td class="r" data-label="Custo/Resultado">' + custoTxt + '</td>';
-  });
+  }, totalRow);
   html += '</div>';
   return html;
 }
@@ -681,7 +681,7 @@ function googleSectionHtml(g, semHeader) {
   var has = c.spend > 0;
 
   var html = '<div class="section">';
-  if (!semHeader) html += '<div class="section-header"><div class="section-icon google">G</div><span class="section-title">Google Ads</span></div>';
+  if (!semHeader) html += '<div class="section-header"><div class="section-icon google"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAABJlBMVEUAAABAh/dChfRBhfRChfRChfVAhfRChfOImZRAg/P/1QBgjszRrzpChPT/wQDLrUBBhPNAgP/6vAPMrkBBhPT6vQD7vATYsjFAhfT7uwRNiOVBhPT8vQOSnYxAhvX/vwD7uwPvuBT7vASeoHz7uwNYi9b7vARvkrj//wD6vATktiP6vQJChfT7vAS2qF//uwD7uwNjj8j7uwNChfP7vARBhPNBhfT6uwL7uwT/vwD7vAPhuQ29tRuYsit/sDSksybKtxfuuwj6uwNChPT8vAOjsyZAqU00qFNNq0jJtxj8vANChfRlrD6vtCFBhfN7rzY0p1QzqFNChfM0p1KKsTAzqFKXsiszqFOqsyIyp1I/qU6NsCxDqUswp1AzqFNBhPQ0p1Izp1PWhmtgAAAAYnRSTlMAIJ/f/39vgGlABvmQcB367xCo/6A2//8wyP+/YP9QDOr/iP/4/0T/AtX/aGCQ/yn8/7ivSLDPcIAU8v/////////h4Jj//////1iQ///A4ECQ8MD/0P+wyWD/Onog8NCAoBgmF/QAAAGFSURBVHgB5dMDkgVBEEXR179zbOXYtm3b9vz9b2KiXZXN8OAsoHAjE7+EkTOJzJyBjArIVYhMcuQrQgbFpChBqtIyUphIVU6aCqSorCJNdQ2S1daRrh6JGriRhCYkaWZuIV0rErQxczsJHYjV2cXM3fIKswZxetjSS0JRbNI+tvWTSGsgWi076ihb2gH2DJJQgghDw+wZoSxpR9kTkXYsMqlHpo0eqXFWTaSmnZxizTQJMu0MK6LSzkIzx0LtPAklIqmur9IgYQGKRRaWgCISKuBbXlldW9/Y3Npm104pULMbn3Zv/+DQcnTMjhMAGCPh1E96dug5Z0szbBdxaS8PA9YdUw2wlcSM1NWh4mibeQ+u+ui014eqY15Zhsu4Id08LLeHqn1ehE+mNWE51NwNDyEg08Jyf6h6mIOigzQ3sDweqp6gEmkvYHk+VLy8QtMkF0/++g3CKQV24Xj/OPTcAtIneW6a4Hr37vhCWE09OT6bEHjO3x/eXl8hUkn9J+3Oj+H/+gZ3oF/rwfCXHQAAAABJRU5ErkJggg==" alt="Google Ads" width="20" height="20"></div><span class="section-title">Google Ads</span></div>';
 
   if (!has) {
     html += '<div class="section-empty">Sem dados de Google Ads neste período.</div></div>';
@@ -716,7 +716,7 @@ function metaMensagensSectionHtml(m, titulo, semHeader) {
   var has = c.spend > 0;
 
   var html = '<div class="section">';
-  if (!semHeader) html += '<div class="section-header"><div class="section-icon meta">M</div><span class="section-title">' + esc(titulo) + '</span></div>';
+  if (!semHeader) html += '<div class="section-header"><div class="section-icon meta"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="#0081FB" d="M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z"/></svg></div><span class="section-title">' + esc(titulo) + '</span></div>';
 
   if (!has) {
     html += '<div class="section-empty">Sem dados de Meta Ads neste período.</div></div>';
@@ -858,7 +858,7 @@ function renderData(data) {
 
   html += '<div class="section">';
   html += '<div class="section-header">';
-  html += '<div class="section-icon meta">M</div>';
+  html += '<div class="section-icon meta"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20"><path fill="#0081FB" d="M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z"/></svg></div>';
   html += '<span class="section-title">Meta Ads</span>';
   html += '</div>';
 
@@ -897,7 +897,7 @@ function renderData(data) {
 
   html += '<div class="section">';
   html += '<div class="section-header">';
-  html += '<div class="section-icon google">G</div>';
+  html += '<div class="section-icon google"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAABJlBMVEUAAABAh/dChfRBhfRChfRChfVAhfRChfOImZRAg/P/1QBgjszRrzpChPT/wQDLrUBBhPNAgP/6vAPMrkBBhPT6vQD7vATYsjFAhfT7uwRNiOVBhPT8vQOSnYxAhvX/vwD7uwPvuBT7vASeoHz7uwNYi9b7vARvkrj//wD6vATktiP6vQJChfT7vAS2qF//uwD7uwNjj8j7uwNChfP7vARBhPNBhfT6uwL7uwT/vwD7vAPhuQ29tRuYsit/sDSksybKtxfuuwj6uwNChPT8vAOjsyZAqU00qFNNq0jJtxj8vANChfRlrD6vtCFBhfN7rzY0p1QzqFNChfM0p1KKsTAzqFKXsiszqFOqsyIyp1I/qU6NsCxDqUswp1AzqFNBhPQ0p1Izp1PWhmtgAAAAYnRSTlMAIJ/f/39vgGlABvmQcB367xCo/6A2//8wyP+/YP9QDOr/iP/4/0T/AtX/aGCQ/yn8/7ivSLDPcIAU8v/////////h4Jj//////1iQ///A4ECQ8MD/0P+wyWD/Onog8NCAoBgmF/QAAAGFSURBVHgB5dMDkgVBEEXR179zbOXYtm3b9vz9b2KiXZXN8OAsoHAjE7+EkTOJzJyBjArIVYhMcuQrQgbFpChBqtIyUphIVU6aCqSorCJNdQ2S1daRrh6JGriRhCYkaWZuIV0rErQxczsJHYjV2cXM3fIKswZxetjSS0JRbNI+tvWTSGsgWi076ihb2gH2DJJQgghDw+wZoSxpR9kTkXYsMqlHpo0eqXFWTaSmnZxizTQJMu0MK6LSzkIzx0LtPAklIqmur9IgYQGKRRaWgCISKuBbXlldW9/Y3Npm104pULMbn3Zv/+DQcnTMjhMAGCPh1E96dug5Z0szbBdxaS8PA9YdUw2wlcSM1NWh4mibeQ+u+ui014eqY15Zhsu4Id08LLeHqn1ehE+mNWE51NwNDyEg08Jyf6h6mIOigzQ3sDweqp6gEmkvYHk+VLy8QtMkF0/++g3CKQV24Xj/OPTcAtIneW6a4Hr37vhCWE09OT6bEHjO3x/eXl8hUkn9J+3Oj+H/+gZ3oF/rwfCXHQAAAABJRU5ErkJggg==" alt="Google Ads" width="20" height="20"></div>';
   html += '<span class="section-title">Google Ads</span>';
   html += '</div>';
 
@@ -961,7 +961,7 @@ function kpiCard(k) {
   '</div>';
 }
 
-function campTable(camps, headers, rowFn) {
+function campTable(camps, headers, rowFn, totalRowHtml) {
   if (!camps || !camps.length)
     return '<div style="font-size:12px;color:var(--cinza);padding:8px 0;">Nenhuma campanha com dados no período.</div>';
   var html = '<div class="table-wrap"><table>';
@@ -970,7 +970,9 @@ function campTable(camps, headers, rowFn) {
     '</tr></thead>';
   html += '<tbody>' +
     camps.map(function(c) { return '<tr>' + rowFn(c) + '</tr>'; }).join('') +
-    '</tbody></table></div>';
+    '</tbody>';
+  if (totalRowHtml) html += '<tfoot><tr class="tr-total">' + totalRowHtml + '</tr></tfoot>';
+  html += '</table></div>';
   return html;
 }
 
