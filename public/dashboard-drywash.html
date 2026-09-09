@@ -303,6 +303,14 @@
   tfoot tr.tr-total td { padding: 10px 14px; font-size: 12px; font-weight: 800; color: var(--verde-escuro); white-space: nowrap; }
   tfoot tr.tr-total td.camp-name { font-weight: 800; }
 
+  /* BOTAO VER POST */
+  .btn-post {
+    display: inline-block; padding: 4px 10px; border-radius: 6px;
+    background: var(--verde); color: #fff; font-size: 11px; font-weight: 700;
+    text-decoration: none; white-space: nowrap;
+  }
+  .btn-post:hover { background: var(--verde-escuro); }
+
   /* DIVIDER */
   .divider { border: none; border-top: 1.5px solid var(--cinza-borda); margin: 28px 0; }
 
@@ -639,8 +647,9 @@ function metaGeralSectionHtml(m) {
     '<td class="r" data-label="Cliques">' + fmtNum(c.clicks) + '</td>' +
     '<td class="r" data-label="CPM">' + fmtBRL(c.cpm) + '</td>' +
     '<td class="r" data-label="Resultado">—</td>' +
-    '<td class="r" data-label="Custo/Resultado">—</td>';
-  html += campTable(camps, ['Campanha','Orçamento','Investido','Alcance','CTR','Cliques','CPM','Resultado','Custo/Resultado'], function(row) {
+    '<td class="r" data-label="Custo/Resultado">—</td>' +
+    '<td class="r" data-label="Post">—</td>';
+  html += campTable(camps, ['Campanha','Orçamento','Investido','Alcance','CTR','Cliques','CPM','Resultado','Custo/Resultado','Post'], function(row) {
     var custoTxt = row.resultadoValor > 0 ? (fmtBRL(row.custoPorResultado) + ' / ' + esc(row.resultadoLabel)) : '—';
     return '<td class="camp-name">' + esc(row.nome) + '</td>' +
       '<td class="r" data-label="Orçamento">' + (row.orcamento > 0 ? fmtBRL(row.orcamento) : '—') + '</td>' +
@@ -650,7 +659,8 @@ function metaGeralSectionHtml(m) {
       '<td class="r" data-label="Cliques">' + fmtNum(row.clicks) + '</td>' +
       '<td class="r" data-label="CPM">' + fmtBRL(row.cpm) + '</td>' +
       '<td class="r num-bold" data-label="Resultado">' + fmtNum(row.resultadoValor) + ' ' + esc(row.resultadoLabel) + '</td>' +
-      '<td class="r" data-label="Custo/Resultado">' + custoTxt + '</td>';
+      '<td class="r" data-label="Custo/Resultado">' + custoTxt + '</td>' +
+      '<td class="r" data-label="Post">' + postLinkHtml(row.igLink) + '</td>';
   }, totalRow);
   html += '</div>';
   return html;
@@ -758,16 +768,22 @@ function metaTurbinadaSectionHtml(m, titulo) {
     { label: 'ThruPlay 50%',    cur: c.video_p50,   prev: p.video_p50,   fmt: 'num', inv: false },
   ];
   var html = '<div class="kpis">' + kpis.map(kpiCard).join('') + '</div>';
-  html += campTable(camps, ['Campanha','Investido','Alcance','CTR','Cliques','Engajamento','ThruPlay 50%'], function(row) {
+  html += campTable(camps, ['Campanha','Investido','Alcance','CTR','Cliques','Engajamento','ThruPlay 50%','Post'], function(row) {
     return '<td class="camp-name">' + esc(row.nome) + '</td>' +
       '<td class="r num-bold" data-label="Investido">' + fmtBRL(row.spend) + '</td>' +
       '<td class="r" data-label="Alcance">' + fmtNum(row.reach) + '</td>' +
       '<td class="r" data-label="CTR">' + (row.ctr || 0).toFixed(2) + '%</td>' +
       '<td class="r" data-label="Cliques">' + fmtNum(row.clicks) + '</td>' +
       '<td class="r" data-label="Engajamento">' + fmtNum(row.engajamento) + '</td>' +
-      '<td class="r" data-label="ThruPlay 50%">' + fmtNum(row.video_p50) + '</td>';
+      '<td class="r" data-label="ThruPlay 50%">' + fmtNum(row.video_p50) + '</td>' +
+      '<td class="r" data-label="Post">' + postLinkHtml(row.igLink) + '</td>';
   });
   return html;
+}
+
+function postLinkHtml(link) {
+  if (!link) return '—';
+  return '<a href="' + esc(link) + '" target="_blank" rel="noopener" class="btn-post">Ver post ↗</a>';
 }
 
 function metaAwarenessSectionHtml(m) {
