@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         destination: '/dashboard-drywash.html',
       },
       {
+        source: '/drywash',
+        destination: '/dashboard-drywash.html',
+      },
+      {
         source: '/softcut',
         destination: '/dashboard-softcut.html',
       },
